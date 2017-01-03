@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>user-service</artifactId>
+    <artifactId>sequence-service</artifactId>
 
     <dependencies>
 
@@ -43,6 +43,13 @@
                 <includes>
                     <include>*.*</include>
                 </includes>
+            </resource>
+            <resource>
+                <directory>${basedir}/src/main/resources/lua</directory>
+                <includes>
+                    <include>*.*</include>
+                </includes>
+                <targetPath>lua</targetPath>
             </resource>
         </resources>
         <plugins>
