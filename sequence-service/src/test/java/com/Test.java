@@ -8,7 +8,10 @@ import com.dinfo.sequence.service.GeneratorService;
 import com.google.common.base.Stopwatch;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.SpringBootCondition;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cloud.config.client.ConfigClientProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Date;
@@ -23,6 +26,9 @@ public class Test {
 
     @Autowired
     private GeneratorService generator;
+    @Autowired
+    private ApplicationContext context;
+
     @org.junit.Test
     public void test(){
         Stopwatch stopwatch=Stopwatch.createStarted();
@@ -40,5 +46,9 @@ public class Test {
 
         Date date=new Date(119701l);
         System.out.println("date=" + Dates.format(date));
+    }
+    @org.junit.Test
+    public void testconfig(){
+        context.get
     }
 }

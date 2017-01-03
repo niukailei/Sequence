@@ -19,7 +19,7 @@ public enum SequenceType {
     /**
      *当前日期＋序列号,格式:YYYYMMDD＋shareId（6）＋
      */
-    DateStrType(2,"DateStrRedis", "/lua/DateStrRedis.lua",500,new DateStrTypeLuaDeal(),"日期字符序列号生成");
+    DateStrType(2,"DateTypeRedis", "/lua/DateTypeRedis.lua",500,new DateStrTypeLuaDeal(),"日期字符序列号生成");
 
     /**
      * 类型

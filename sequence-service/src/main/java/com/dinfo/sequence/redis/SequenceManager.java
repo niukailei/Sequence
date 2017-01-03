@@ -2,6 +2,7 @@ package com.dinfo.sequence.redis;
 
 import com.dinfo.common.model.Response;
 import com.dinfo.log.Loggers;
+import com.dinfo.sequence.redis.redispro.RedisPro;
 import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
@@ -10,6 +11,8 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
@@ -26,13 +29,13 @@ public class SequenceManager {
 
     private static final Logger logger = Loggers.get("sequence");
 
+    @Autowired
+    private ApplicationContext applicationContext;
     /**
      * 序列号生成信息类Map
      * key为SequenceType.redisProKey
      */
     private  Map<String,Sequence> sequenceMap=Maps.newConcurrentMap();
-
-
 
     /**
      * 获取序列号类型
@@ -64,12 +67,12 @@ public class SequenceManager {
             String luaScriptSha = Hex.encodeHexString(DigestUtils.sha1(luaScript));
 
             //生成redislient集合
-            String redisConnectStr=redisMap.get(sequenceType.getRedisProKey());
-            if(Strings.isNullOrEmpty(redisConnectStr)){
+            RedisPro redisPro=applicationContext.getBean(sequenceType.getRedisProKey(), RedisPro.class);
+            if(Strings.isNullOrEmpty(redisPro.getConStr())){
                 return Response.notOk("redisConnectStr is null:"+sequenceType.getRedisProKey());
             }
             List<Redis> redisList= Lists.newArrayList();
-            String[] redisConStrArray=redisConnectStr.split(",");
+            String[] redisConStrArray=redisPro.getConStr().split(",");
             for(String redisConStr:redisConStrArray) {
                 Redis redis = new JedisImpl(redisConStr);
                 redisList.add(redis);
@@ -77,7 +80,7 @@ public class SequenceManager {
             RoundRobinRedis roundRobinRedis=new RoundRobinRedis(redisList);
 
             //生成Sequence
-            Sequence sequence=new Sequence(luaScript,luaScriptSha,redisConnectStr,roundRobinRedis,sequenceType);
+            Sequence sequence=new Sequence(luaScript,luaScriptSha,redisPro.getConStr(),roundRobinRedis,sequenceType);
             return Response.ok(sequence);
 
         } catch (Exception e) {
