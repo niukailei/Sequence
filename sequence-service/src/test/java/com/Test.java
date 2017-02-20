@@ -17,8 +17,8 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by winston on 15/10/5.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = Test.class)
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@SpringBootTest(classes = Test.class)
 public class Test {
 
     @Autowired
@@ -26,7 +26,7 @@ public class Test {
     @Autowired
     private ApplicationContext context;
 
-    @org.junit.Test
+//    @org.junit.Test
     public void test(){
         Stopwatch stopwatch=Stopwatch.createStarted();
         int j=0;
@@ -44,7 +44,7 @@ public class Test {
         Date date=new Date(119701l);
         System.out.println("date=" + Dates.format(date));
     }
-    @org.junit.Test
+//    @org.junit.Test
     public void testconfig(){
     }
 }
