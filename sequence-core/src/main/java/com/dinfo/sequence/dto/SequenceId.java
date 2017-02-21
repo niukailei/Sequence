@@ -12,13 +12,17 @@ public class SequenceId implements Serializable {
   /**
    * id
    */
-  private final long id;
+  private  long id;
 
   /**
    * id 生成时间
    */
-  private final long time;
+  private  long time;
 
+  public SequenceId() {
+  
+  }
+  
   public SequenceId(final long id, final long time) {
     this.id = id;
     this.time = time;
