@@ -1,3 +1,4 @@
+-- print(KEYS)
 local lock_key = 'longtype-lock'
 local logical_shard_id_key = 'logical-shard-id'
 
@@ -11,7 +12,7 @@ local sequence_key = KEYS[5]
 验证锁是否存在，如果存在表明在1毫秒已经分配完序列号
 --]]
 if redis.call('EXISTS', lock_key) == 1 then
-  redis.log(redis.LOG_INFO, 'sequence: Cannot generate ID, waiting for lock to expire.')
+  -- redis.log(redis.LOG_INFO, 'sequence: Cannot generate ID, waiting for lock to expire.')
   return redis.error_reply('sequence: Cannot generate ID, waiting for lock to expire.')
 end
 
@@ -26,7 +27,7 @@ local logical_shard_id = tonumber(redis.call('GET', logical_shard_id_key)) or -1
   如果在1毫秒已经分配完序列号,则加锁限制不产生id
  --]]
 if end_sequence >= max_sequence then
-  redis.log(redis.LOG_INFO, 'sequence: Rolling sequence back to the start, locking for 1ms.')
+  -- redis.log(redis.LOG_INFO, 'sequence: Rolling sequence back to the start, locking for 1ms.')
   redis.call('SET', sequence_key, '-1')
   redis.call('PSETEX', lock_key, 1, 'lock')
   end_sequence = max_sequence
