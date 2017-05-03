@@ -36,7 +36,8 @@ public class Test1 {
         Stopwatch stopwatch=Stopwatch.createStarted();
         int j=0;
         for(int i=0;i<1;i++){
-            Response<SequenceId> response=generator.generateDateStrId("aaa",7);
+//            Response<SequenceId> response=generator.generateDateStrId("aaa",7);
+            Response<SequenceId> response=generator.generateId();
             if(response.isSuccess()){
                 j++;
                 System.out.println("id="+response.getData().getId());
