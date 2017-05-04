@@ -36,6 +36,14 @@ public class SequenceId implements Serializable {
     return time;
   }
 
+  public void setId(long id) {
+    this.id = id;
+  }
+
+  public void setTime(long time) {
+    this.time = time;
+  }
+
   @Override
   public String toString() {
     return "SequenceId{" +
