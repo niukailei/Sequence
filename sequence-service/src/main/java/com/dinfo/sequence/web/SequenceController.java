@@ -26,10 +26,16 @@ public class SequenceController {
      * @param batchSize 生成数量
      * @return 结果
      */
+    @RequestMapping(value = "/generateIdBatchUnlimited", method = RequestMethod.GET)
+    public Response<List<SequenceId>> generateIdBatchUnlimited(@RequestParam long batchSize) {
+        return generatorService.generateIdBatchUnlimited(batchSize);
+    }
+
     @RequestMapping(value = "/generateIdBatch", method = RequestMethod.GET)
     public Response<List<SequenceId>> generateIdBatch(@RequestParam long batchSize) {
         return generatorService.generateIdBatch(batchSize);
     }
+
     /**
      * 生成序列号(long)
      * @return 结果
@@ -56,4 +62,6 @@ public class SequenceController {
     public Response<SequenceId> generateDateStrId(@RequestParam String keyName,@RequestParam int keySize) {
         return generatorService.generateDateStrId(keyName,keySize);
     }
+
+
 }

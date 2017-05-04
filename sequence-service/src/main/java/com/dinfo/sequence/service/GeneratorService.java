@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -55,6 +56,42 @@ public class GeneratorService {
     }
     return Response.notOk(result.getErr());
   }
+    /**
+     * 生成大批量sequenceId，没有最大1000条的限制
+     * @param batchSize 批量生成id数量
+     * @return
+     */
+    public Response<List<SequenceId>> generateIdBatchUnlimited(Long batchSize) {
+        List<SequenceId> results= new ArrayList<>();
+        if(batchSize!=null && batchSize>0){
+            Long num=batchSize;
+            while(num>0){
+                if(num/1000>0){
+                    Response<List<SequenceId>> response = generateIdBatch(1000);
+                    if(response.isNotSuccess()) return response;
+
+                    results.addAll(response.getData());
+                    num-=1000;
+                }else if(num/100>0){
+                    Response<List<SequenceId>> response = generateIdBatch(100);
+
+                    if(response.isNotSuccess()) return response;
+
+                    results.addAll(response.getData());
+                    num-=100;
+                }else{
+                    Response<List<SequenceId>> response = generateIdBatch(num);
+
+                    if(response.isNotSuccess()) return response;
+
+                    results.addAll(response.getData());
+                    num-=num;
+                }
+            }
+        }
+
+        return Response.ok(results);
+    }
 
   /**
    *  尽最大可能生成一批id
