@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: ${env:dev}
+    active: ${env:prod}
   application:
     serviceId : sequence-service
     name: sequence-service
@@ -16,4 +16,4 @@ server:
 eureka:
   client:
     service-url:
-            defaultZone: ${eureka.server:http://192.168.34.76:8000/eureka}
+            defaultZone: ${eureka.server:http://127.0.0.1:8000/eureka}
