@@ -33,6 +33,16 @@ public class JedisImpl implements Redis {
   }
 
   /**
+   * 增加密码
+   * @param hostAndPort
+   * @param password 密码
+   * @throws Exception
+   */
+  public JedisImpl(final String hostAndPort,final String password) throws Exception{
+    this.redisClient = jedisPoolFromServerAndPort(hostAndPort,password);
+  }
+
+  /**
    * redis加载lua脚本
    * @param luaScript lua脚本.
    * @return lua脚本的SHA
@@ -84,5 +94,14 @@ public class JedisImpl implements Redis {
       throw new Exception("HostAndPort is error:"+hostAndPortAndPwd);
     }
     return new RedisClient(matcher.group(1), Integer.valueOf(matcher.group(2)));
+  }
+
+  private RedisClient jedisPoolFromServerAndPort(final String hostAndPortAndPwd,final String password) throws Exception{
+    Matcher matcher = SERVER_FORMAT.matcher(hostAndPortAndPwd);
+
+    if (!matcher.matches()) {
+      throw new Exception("HostAndPort is error:"+hostAndPortAndPwd);
+    }
+    return new RedisClient(matcher.group(1), Integer.valueOf(matcher.group(2)),password);
   }
 }

@@ -10,6 +10,7 @@ import com.google.common.collect.Maps;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -73,8 +74,15 @@ public class SequenceManager {
             }
             List<Redis> redisList= Lists.newArrayList();
             String[] redisConStrArray=redisPro.getConStr().split(",");
+            String password =redisPro.getPassword();
             for(String redisConStr:redisConStrArray) {
-                Redis redis = new JedisImpl(redisConStr);
+                Redis redis;
+                if(StringUtils.isBlank(password)){
+                    //增加密码
+                    redis = new JedisImpl(redisConStr,password);
+                }else {
+                    redis = new JedisImpl(redisConStr);
+                }
                 redisList.add(redis);
             }
             RoundRobinRedis roundRobinRedis=new RoundRobinRedis(redisList);

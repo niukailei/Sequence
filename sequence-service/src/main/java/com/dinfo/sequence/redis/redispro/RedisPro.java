@@ -10,4 +10,6 @@ public interface RedisPro {
      * @return 联系信息
      */
     String getConStr();
+
+    String getPassword();
 }

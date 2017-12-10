@@ -11,9 +11,20 @@ import org.springframework.stereotype.Service;
 public class LongTypeRedisPro implements RedisPro{
 
     private String longTtypeCon;
+
+    private String password;
     @Override
     public String getConStr() {
         return getLongTtypeCon();
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getLongTtypeCon() {
