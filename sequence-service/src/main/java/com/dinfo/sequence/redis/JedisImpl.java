@@ -1,13 +1,14 @@
 package com.dinfo.sequence.redis;
 
-import com.dinfo.common.model.Response;
-import com.dinfo.core.RedisClient;
-import com.google.common.base.Throwables;
-
-
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.dinfo.common.model.Response;
+import com.dinfo.core.RedisClient;
+import com.dinfo.core.RedisClusterClient;
+import com.dinfo.core.RedisPoolClient;
+import com.google.common.base.Throwables;
 
 
 
@@ -31,6 +32,7 @@ public class JedisImpl implements Redis {
   public JedisImpl(final String hostAndPort) throws Exception{
     this.redisClient = jedisPoolFromServerAndPort(hostAndPort);
   }
+  
 
   /**
    * 增加密码
@@ -41,6 +43,25 @@ public class JedisImpl implements Redis {
   public JedisImpl(final String hostAndPort,final String password) throws Exception{
     this.redisClient = jedisPoolFromServerAndPort(hostAndPort,password);
   }
+  
+  /**
+   * 构造函数
+   */
+  public JedisImpl(final String hostAndPort, boolean isCluster) throws Exception{
+    this.redisClient = jedisPoolFromServerAndPort(hostAndPort,isCluster);
+  }
+  
+
+  /**
+   * 增加密码
+   * @param hostAndPort
+   * @param password 密码
+   * @throws Exception
+   */
+  public JedisImpl(final String hostAndPort,final String password, boolean isCluster) throws Exception{
+    this.redisClient = jedisPoolFromServerAndPort(hostAndPort,password,isCluster);
+  }
+  
 
   /**
    * redis加载lua脚本
@@ -93,7 +114,7 @@ public class JedisImpl implements Redis {
     if (!matcher.matches()) {
       throw new Exception("HostAndPort is error:"+hostAndPortAndPwd);
     }
-    return new RedisClient(matcher.group(1), Integer.valueOf(matcher.group(2)));
+    return new RedisPoolClient(matcher.group(1), Integer.valueOf(matcher.group(2)));
   }
 
   private RedisClient jedisPoolFromServerAndPort(final String hostAndPortAndPwd,final String password) throws Exception{
@@ -102,6 +123,26 @@ public class JedisImpl implements Redis {
     if (!matcher.matches()) {
       throw new Exception("HostAndPort is error:"+hostAndPortAndPwd);
     }
-    return new RedisClient(matcher.group(1), Integer.valueOf(matcher.group(2)),password);
+    return new RedisPoolClient(matcher.group(1), Integer.valueOf(matcher.group(2)),password);
+  }
+  
+  private RedisClient jedisPoolFromServerAndPort(final String hostAndPortAndPwd, final boolean isCluster) throws Exception{
+    String[] hosts = hostAndPortAndPwd.split(",");
+    for(String host : hosts) {
+      if (!SERVER_FORMAT.matcher(host).matches()) {
+        throw new Exception("HostAndPort is error:"+hostAndPortAndPwd);
+      }
+    }
+    return new RedisClusterClient(hostAndPortAndPwd);
+  }
+  
+  private RedisClient jedisPoolFromServerAndPort(final String hostAndPortAndPwd, final String password, final boolean isCluster) throws Exception{
+    String[] hosts = hostAndPortAndPwd.split(",");
+    for(String host : hosts) {
+      if (!SERVER_FORMAT.matcher(host).matches()) {
+        throw new Exception("HostAndPort is error:"+hostAndPortAndPwd);
+      }
+    }
+    return new RedisClusterClient(hostAndPortAndPwd, password);
   }
 }

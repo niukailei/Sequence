@@ -19,7 +19,19 @@ public enum SequenceType {
     /**
      *当前日期＋序列号,格式:YYYYMMDD＋shareId（6）＋
      */
-    DateStrType(2,"DateTypeRedis", "/lua/DateTypeRedis.lua",500,new DateStrTypeLuaDeal(),"日期字符序列号生成");
+    DateStrType(2,"DateTypeRedis", "/lua/DateTypeRedis.lua",500,new DateStrTypeLuaDeal(),"日期字符序列号生成"),
+  
+    /**
+     *根据snowflake原理生成（日期Long（41）＋shareId（6）＋squenceId（16）
+     *使用redis集群，lua脚本有区别
+     */
+    LongTypeByCluster(3,"LongTypeRedis", "/lua/LongTypeRedisCluster.lua",1000,new LongTypeLuaDeal(),"长整型序列号生成"),
+
+    /**
+     *当前日期＋序列号,格式:YYYYMMDD＋shareId（6）＋
+     *使用redis集群，lua脚本有区别
+     */
+    DateStrTypeByCluster(4,"DateTypeRedis", "/lua/DateTypeRedisCluster.lua",500,new DateStrTypeLuaDeal(),"日期字符序列号生成");
 
     /**
      * 类型

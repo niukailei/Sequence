@@ -41,6 +41,12 @@ public class GeneratorService {
    */
   @Value("${maximumAttempts}")
   private final int maximumAttempts=Constant.DEFAULT_MAX_ATTEMPTS;
+  
+  /**
+   * 是否集群
+   */
+  @Value("${cluster}")
+  private final Boolean isCluster = false;
 
 
   /**
@@ -97,7 +103,7 @@ public class GeneratorService {
    *  尽最大可能生成一批id
    */
     public Response<List<SequenceId>> generateIdBatch(final long batchSize) {
-      return generateIdBatch(SequenceType.LongType,"LongType",-1,batchSize);
+      return generateIdBatch(isCluster?SequenceType.LongTypeByCluster:SequenceType.LongType,"LongType",-1,batchSize);
     }
 
     public Response<SequenceId> generateDateStrId(final String keyName, final Integer keySize) {
@@ -110,7 +116,7 @@ public class GeneratorService {
     }
 
     public Response<List<SequenceId>> generateDateStrIdBatch(final String keyName, final Integer keySize, long batchSize) {
-        return generateIdBatch(SequenceType.DateStrType,keyName,keySize,batchSize);
+        return generateIdBatch(isCluster?SequenceType.DateStrTypeByCluster:SequenceType.DateStrType,keyName,keySize,batchSize);
     }
 
     /**

@@ -10,12 +10,14 @@ import org.springframework.stereotype.Service;
 @ConfigurationProperties(prefix = "redis")
 public class DateTypeRedisPro implements RedisPro {
 
-    private String dateTtypeCon;
+    private String dateTypeCon;
 
     private String password;
+    
+    
     @Override
     public String getConStr() {
-        return getDateTtypeCon();
+        return getDateTypeCon();
     }
 
     @Override
@@ -23,15 +25,16 @@ public class DateTypeRedisPro implements RedisPro {
         return password;
     }
 
-    public String getDateTtypeCon() {
-        return dateTtypeCon;
+    public String getDateTypeCon() {
+        return dateTypeCon;
     }
 
-    public void setDateTtypeCon(String dateTtypeCon) {
-        this.dateTtypeCon = dateTtypeCon;
+    public void setDateTypeCon(String dateTtypeCon) {
+        this.dateTypeCon = dateTtypeCon;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
+
 }

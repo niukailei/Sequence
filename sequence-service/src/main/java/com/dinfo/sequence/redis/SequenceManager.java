@@ -69,26 +69,42 @@ public class SequenceManager {
 
             //生成redislient集合
             RedisPro redisPro=applicationContext.getBean(sequenceType.getRedisProKey(), RedisPro.class);
-            if(Strings.isNullOrEmpty(redisPro.getConStr())){
-                return Response.notOk("redisConnectStr is null:"+sequenceType.getRedisProKey());
-            }
             List<Redis> redisList= Lists.newArrayList();
-            String[] redisConStrArray=redisPro.getConStr().split(",");
             String password =redisPro.getPassword();
-            for(String redisConStr:redisConStrArray) {
-                Redis redis;
-                if(StringUtils.isBlank(password)){
-                    //增加密码
-                    redis = new JedisImpl(redisConStr,password);
-                }else {
-                    redis = new JedisImpl(redisConStr);
-                }
-                redisList.add(redis);
+            String conStr = redisPro.getConStr();
+            int type = sequenceType.getType();
+            //判断redis是否是集群,类型3和4为集群类型
+            if(type == 1 ||  type == 2) {
+              if(Strings.isNullOrEmpty(redisPro.getConStr())){
+                return Response.notOk("redisConnectStr is null:"+sequenceType.getRedisProKey());
+              }
+              
+              String[] redisConStrArray=conStr.split(",");
+
+              for(String redisConStr:redisConStrArray) {
+                  Redis redis;
+                  if(StringUtils.isBlank(password)){
+                      //增加密码
+                      redis = new JedisImpl(redisConStr,password);
+                  }else {
+                      redis = new JedisImpl(redisConStr);
+                  }
+                  redisList.add(redis);
+              }
+            } else {
+              Redis redis;
+              if(StringUtils.isBlank(password)){
+                //增加密码
+                redis = new JedisImpl(conStr,password,true);
+              }else {
+                  redis = new JedisImpl(conStr,true);
+              }
+              redisList.add(redis);
             }
             RoundRobinRedis roundRobinRedis=new RoundRobinRedis(redisList);
 
             //生成Sequence
-            Sequence sequence=new Sequence(luaScript,luaScriptSha,redisPro.getConStr(),roundRobinRedis,sequenceType);
+            Sequence sequence=new Sequence(luaScript,luaScriptSha,conStr,roundRobinRedis,sequenceType);
             return Response.ok(sequence);
 
         } catch (Exception e) {
