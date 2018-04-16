@@ -16,4 +16,15 @@ server:
 eureka:
   client:
     service-url:
-            defaultZone: ${eureka.server:http://127.0.0.1:8000/eureka}
+            defaultZone: ${eureka.server:http://192.168.181.93:8000/eureka}
+
+maximumAttempts: 5
+
+#是否集群
+cluster: true 
+
+redis:
+  #使用redis集群时，申请longType类型的redis服务器地址最多64台
+  longTypeCon: 192.168.40.10:6000,192.168.40.10:6001,192.168.40.10:6002,192.168.40.10:6003,192.168.40.10:6004,192.168.40.10:6005
+  #使用redis集群时，申请dateType类型的redis服务器地址最多10台
+  dateTypeCon: 192.168.40.10:6000,192.168.40.10:6001,192.168.40.10:6002,192.168.40.10:6003,192.168.40.10:6004,192.168.40.10:6005
