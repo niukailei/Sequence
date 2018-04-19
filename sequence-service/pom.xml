@@ -29,6 +29,18 @@
             <groupId>com.dinfo.redis</groupId>
             <artifactId>dinfo-redis</artifactId>
             <version>1.1.0</version>
+            <exclusions>
+	            <exclusion>
+	            	<groupId>redis.clients</groupId>
+	            	<artifactId>jedis</artifactId>
+	            </exclusion>
+            </exclusions>
+        </dependency>
+        
+         <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>2.9.0</version>
         </dependency>
 
         <dependency>

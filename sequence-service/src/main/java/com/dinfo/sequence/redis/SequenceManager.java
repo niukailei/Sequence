@@ -83,7 +83,7 @@ public class SequenceManager {
 
               for(String redisConStr:redisConStrArray) {
                   Redis redis;
-                  if(StringUtils.isBlank(password)){
+                  if(StringUtils.isNotBlank(password)){
                       //增加密码
                       redis = new JedisImpl(redisConStr,password);
                   }else {
@@ -93,7 +93,7 @@ public class SequenceManager {
               }
             } else {
               Redis redis;
-              if(StringUtils.isBlank(password)){
+              if(StringUtils.isNotBlank(password)){
                 //增加密码
                 redis = new JedisImpl(conStr,password,true);
               }else {
