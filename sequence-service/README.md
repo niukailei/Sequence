@@ -13,5 +13,5 @@ sequence-service支持redis多实例和redis集群两种模式,通过配置文�
     
 
 #调用举例
-* http://localhost:9000/generateIdBatch?batchSize=1000
+* localhost:9000/generateIdBatch?batchSize=1000
 * localhost:9000/generateDateStrId?keyName=ccc&keySize=5
