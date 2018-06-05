@@ -1,8 +1,13 @@
 package com.dinfo.sequence.redis;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.bouncycastle.util.Arrays;
 
 import com.dinfo.common.model.Response;
 import com.dinfo.core.RedisClient;
@@ -87,10 +92,20 @@ public class JedisImpl implements Redis {
 
   @Override
   public Response<RedisDto> evalLuaScript(String luaScript, List<String> arguments) {
-    String[] args = arguments.toArray(new String[arguments.size()]);
+    List<String> inputlist = new ArrayList<String>(arguments);
+    if(redisClient instanceof RedisClusterClient) {
+      int tag = new Random().nextInt(Integer.parseInt(inputlist.get(2)));
+      String hashtag = "{" + tag + "}";
+      for (int i = 0; i < inputlist.size(); i++) {
+          inputlist.set(i, hashtag + inputlist.get(i));
+      }
+      inputlist.add(hashtag);
+    } 
+    
+    String[] args =  inputlist.toArray(new String[inputlist.size()]);
     try {
       @SuppressWarnings("unchecked")
-      List<Long> results = (List<Long>) redisClient.eval(luaScript, arguments.size(), args);
+      List<Long> results = (List<Long>) redisClient.eval(luaScript, inputlist.size(), args);
       return Response.ok(new RedisDto(results));
     } catch (Throwable e) {
       return Response.notOk(Throwables.getStackTraceAsString(e));
