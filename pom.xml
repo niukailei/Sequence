@@ -88,5 +88,5 @@
         <url>http://192.168.191.117:8003/nexus/repository/dinfosnapshot/</url>
       </snapshotRepository>
     </distributionManagement>
-    
+    # ggggggggggggggggggggg
 </project>
